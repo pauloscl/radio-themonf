@@ -246,8 +246,12 @@
             transform: translateY(-3px);
         }
         
-        .original-player {
-            display: none;
+        .status-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
         }
         
         @media (max-width: 600px) {
@@ -301,7 +305,7 @@
                         <i class="fas fa-step-backward"></i>
                     </button>
                     <button class="play-btn" id="play-btn">
-                        <i class="fas fa-play"></i>
+                        <i class="fas fa-play" id="play-icon"></i>
                     </button>
                     <button class="secondary-btn" id="next-btn">
                         <i class="fas fa-step-forward"></i>
@@ -312,6 +316,10 @@
                     <i class="fas fa-volume-down"></i>
                     <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="80">
                     <i class="fas fa-volume-up"></i>
+                </div>
+
+                <div class="status-message" id="status-message">
+                    Clique em play para iniciar a transmissão
                 </div>
             </div>
             
@@ -334,86 +342,117 @@
                 </a>
             </div>
         </div>
-        
-        <!-- Incorporação do player real (inicialmente oculto) -->
-        <div class="original-player">
-            <script src="//myradiostream.com/embed/Themonf"></script>
-        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const playBtn = document.getElementById('play-btn');
+            const playIcon = document.getElementById('play-icon');
             const volumeSlider = document.getElementById('volume-slider');
+            const statusMessage = document.getElementById('status-message');
             let isPlaying = false;
+            let audioContext;
+            let audioElement;
             
-            // Função para iniciar o player real
-            function startRealPlayer() {
-                // Cria um iframe com a URL original da rádio
-                const iframe = document.createElement('iframe');
-                iframe.src = 'http://Themonf.com-listen.live/';
-                iframe.style.display = 'none';
-                document.body.appendChild(iframe);
+            // Função para iniciar o player
+            function startPlayer() {
+                statusMessage.textContent = "Conectando à transmissão...";
                 
-                // Adiciona o script de incorporação se ainda não estiver presente
-                if (!document.querySelector('script[src="//myradiostream.com/embed/Themonf"]')) {
-                    const script = document.createElement('script');
-                    script.src = '//myradiostream.com/embed/Themonf';
-                    document.body.appendChild(script);
+                try {
+                    // Criar elemento de áudio
+                    audioElement = new Audio();
+                    
+                    // URL do stream da rádio (usando um proxy CORS para evitar problemas de mixed content)
+                    const streamURL = 'https://corsproxy.io/?http://s26.myradiostream.com:22684/';
+                    
+                    audioElement.src = streamURL;
+                    audioElement.crossOrigin = "anonymous";
+                    audioElement.preload = "none";
+                    
+                    // Evento quando o áudio começa a tocar
+                    audioElement.addEventListener('play', function() {
+                        isPlaying = true;
+                        playIcon.className = "fas fa-pause";
+                        statusMessage.textContent = "Transmissão ao vivo - Rádio THEMONF";
+                        document.querySelector('.song-title').textContent = "Transmissão Ao Vivo";
+                        document.querySelector('.artist').textContent = "Rádio THEMONF - 128kbps";
+                    });
+                    
+                    // Evento em caso de erro
+                    audioElement.addEventListener('error', function(e) {
+                        console.error("Erro no áudio:", e);
+                        statusMessage.textContent = "Erro ao conectar. Atualize a página e tente novamente.";
+                        isPlaying = false;
+                        playIcon.className = "fas fa-play";
+                    });
+                    
+                    // Tentar reproduzir
+                    audioElement.play().then(() => {
+                        console.log("Áudio iniciado com sucesso");
+                    }).catch(error => {
+                        console.error("Erro ao reproduzir:", error);
+                        statusMessage.textContent = "Clique para permitir a reprodução de áudio";
+                    });
+                    
+                } catch (error) {
+                    console.error("Erro ao iniciar player:", error);
+                    statusMessage.textContent = "Erro ao inicializar o player. Atualize a página.";
                 }
-                
-                console.log('Player real iniciado');
             }
             
-            // Simular funcionalidade de play/pause
+            // Função para parar o player
+            function stopPlayer() {
+                if (audioElement) {
+                    audioElement.pause();
+                    audioElement.src = "";
+                }
+                isPlaying = false;
+                playIcon.className = "fas fa-play";
+                statusMessage.textContent = "Transmissão pausada. Clique para retomar.";
+                document.querySelector('.song-title').textContent = "Transmissão Pausada";
+            }
+            
+            // Controle de play/pause
             playBtn.addEventListener('click', function() {
-                isPlaying = !isPlaying;
-                
                 if (isPlaying) {
-                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                    // Inicia o player real
-                    startRealPlayer();
-                    document.querySelector('.song-title').textContent = "No Ar - Mix Especial";
-                    document.querySelector('.artist').textContent = "DJ Themonf - 128kbps";
+                    stopPlayer();
                 } else {
-                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
-                    document.querySelector('.song-title').textContent = "Transmissão Pausada";
-                    document.querySelector('.artist').textContent = "Rádio THEMONF - 128kbps";
+                    startPlayer();
                 }
             });
             
-            // Simular controle de volume
+            // Controle de volume
             volumeSlider.addEventListener('input', function() {
-                const volume = this.value;
-                // Em uma implementação real, isso controlaria o volume do player
-                console.log("Volume ajustado para: " + volume + "%");
-                
-                // Tentar controlar o volume do player real se disponível
-                try {
-                    const audioElements = document.querySelectorAll('audio, video');
-                    if (audioElements.length > 0) {
-                        audioElements.forEach(audio => {
-                            audio.volume = volume / 100;
-                        });
-                    }
-                } catch (e) {
-                    console.log("Não foi possível ajustar o volume do player real");
+                const volume = this.value / 100;
+                if (audioElement) {
+                    audioElement.volume = volume;
                 }
             });
             
             // Botões de próximo e anterior (apenas para visual)
             document.getElementById('prev-btn').addEventListener('click', function() {
-                alert('Funcionalidade de música anterior simulada');
+                statusMessage.textContent = "Funcionalidade em desenvolvimento";
+                setTimeout(() => {
+                    if (isPlaying) {
+                        statusMessage.textContent = "Transmissão ao vivo - Rádio THEMONF";
+                    }
+                }, 2000);
             });
             
             document.getElementById('next-btn').addEventListener('click', function() {
-                alert('Funcionalidade de próxima música simulada');
+                statusMessage.textContent = "Funcionalidade em desenvolvimento";
+                setTimeout(() => {
+                    if (isPlaying) {
+                        statusMessage.textContent = "Transmissão ao vivo - Rádio THEMONF";
+                    }
+                }, 2000);
             });
             
             // Iniciar automaticamente se o parâmetro autoPlay estiver presente na URL
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('autoPlay')) {
-                playBtn.click();
+                // Pequeno delay para garantir que a interação do usuário seja registrada
+                setTimeout(startPlayer, 500);
             }
         });
     </script>
