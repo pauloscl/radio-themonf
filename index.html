@@ -1,582 +1,116 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rádio THEMONF - Player</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-            padding: 20px;
-        }
-        
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 800px;
-            text-align: center;
-        }
-        
-        .player-card {
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            margin-bottom: 20px;
-        }
-        
-        .radio-logo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            background: linear-gradient(145deg, #8a2387, #e94057, #f27121);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2.5rem;
-            border: 5px solid #fff;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 5px;
-            background: linear-gradient(to right, #fdbb2d, #b21f1f);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .slogan {
-            font-style: italic;
-            margin-bottom: 25px;
-            color: #e0e0e0;
-        }
-        
-        .player-container {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
-        
-        .play-btn {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #8a2387, #e94057);
-            border: none;
-            color: white;
-            font-size: 1.8rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .play-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.4);
-        }
-        
-        .secondary-btn {
-            background: rgba(255, 255, 255, 0.15);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 10px;
-            transition: all 0.3s ease;
-        }
-        
-        .secondary-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
-        
-        .volume-control {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        
-        .volume-slider {
-            -webkit-appearance: none;
-            width: 70%;
-            height: 6px;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            outline: none;
-            margin: 0 15px;
-        }
-        
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #fdbb2d;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .volume-slider::-webkit-slider-thumb:hover {
-            background: #f27121;
-            transform: scale(1.2);
-        }
-        
-        .now-playing {
-            margin-top: 25px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            font-size: 1.1rem;
-        }
-        
-        .song-title {
-            font-weight: bold;
-            color: #fdbb2d;
-            margin-bottom: 5px;
-            font-size: 1.3rem;
-        }
-        
-        .artist {
-            color: #e0e0e0;
-            font-style: italic;
-        }
-        
-        .equalizer {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            height: 40px;
-            margin: 20px 0;
-        }
-        
-        .bar {
-            width: 6px;
-            height: 20px;
-            background: linear-gradient(to top, #8a2387, #e94057);
-            margin: 0 2px;
-            border-radius: 3px;
-            animation: equalize 1.5s infinite ease-in-out;
-        }
-        
-        .bar:nth-child(1) { animation-delay: 0s; }
-        .bar:nth-child(2) { animation-delay: 0.1s; }
-        .bar:nth-child(3) { animation-delay: 0.2s; }
-        .bar:nth-child(4) { animation-delay: 0.3s; }
-        .bar:nth-child(5) { animation-delay: 0.4s; }
-        .bar:nth-child(6) { animation-delay: 0.5s; }
-        .bar:nth-child(7) { animation-delay: 0.6s; }
-        
-        @keyframes equalize {
-            0%, 100% { height: 10px; }
-            50% { height: 30px; }
-        }
-        
-        .radio-info {
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #b0b0b0;
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        
-        .social-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 10px;
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .social-btn:hover {
-            background: linear-gradient(145deg, #8a2387, #e94057);
-            transform: translateY(-3px);
-        }
-        
-        .status-message {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            font-size: 0.9rem;
-        }
-        
-        .permission-request {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(255, 193, 7, 0.2);
-            border-radius: 10px;
-            border-left: 4px solid #ffc107;
-            text-align: left;
-        }
-        
-        .permission-request h3 {
-            color: #ffc107;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .permission-request h3 i {
-            margin-right: 10px;
-        }
-        
-        .permission-request ol {
-            padding-left: 20px;
-            margin: 10px 0;
-        }
-        
-        .permission-request li {
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-        
-        .help-link {
-            color: #fdbb2d;
-            text-decoration: none;
-            border-bottom: 1px dotted #fdbb2d;
-            cursor: pointer;
-        }
-        
-        .help-link:hover {
-            color: #ffc107;
-            border-bottom: 1px solid #ffc107;
-        }
-        
-        @media (max-width: 600px) {
-            .player-card {
-                padding: 20px;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .play-btn {
-                width: 60px;
-                height: 60px;
-            }
-            
-            .secondary-btn {
-                width: 45px;
-                height: 45px;
-            }
-            
-            .permission-request {
-                padding: 12px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Rádio - THEMONF</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #f0f0f0;
+    }
+    header {
+      background: #1f1f1f;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: #ffcc00;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+    nav a {
+      text-decoration: none;
+      color: #f0f0f0;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #ffcc00;
+    }
+    main {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    h2 {
+      color: #ffcc00;
+    }
+    .status {
+      margin: 20px 0;
+      padding: 15px;
+      border: 1px solid #444;
+      border-radius: 8px;
+      background: #2a2a2a;
+    }
+    iframe, .player {
+      width: 100%;
+      border: none;
+      height: 120px;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #1f1f1f;
+      margin-top: 40px;
+      color: #888;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="player-card">
-            <div class="radio-logo">
-                <i class="fas fa-radio"></i>
-            </div>
-            <h1>RÁDIO THEMONF</h1>
-            <p class="slogan">A melhor mixagem para você!</p>
-            
-            <div class="player-container">
-                <div class="equalizer">
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                </div>
-                
-                <div class="now-playing">
-                    <div class="song-title">Transmissão Ao Vivo</div>
-                    <div class="artist">Rádio THEMONF - 128kbps</div>
-                </div>
-                
-                <div class="controls">
-                    <button class="secondary-btn" id="prev-btn">
-                        <i class="fas fa-step-backward"></i>
-                    </button>
-                    <button class="play-btn" id="play-btn">
-                        <i class="fas fa-play" id="play-icon"></i>
-                    </button>
-                    <button class="secondary-btn" id="next-btn">
-                        <i class="fas fa-step-forward"></i>
-                    </button>
-                </div>
-                
-                <div class="volume-control">
-                    <i class="fas fa-volume-down"></i>
-                    <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="80">
-                    <i class="fas fa-volume-up"></i>
-                </div>
+  <header>
+    <h1><i class="fa fa-broadcast-tower"></i> Rádio THEMONF</h1>
+    <nav>
+      <ul>
+        <li><a href="#">Início</a></li>
+        <li><a href="#">Notícias</a></li>
+        <li><a href="#">Estatísticas</a></li>
+        <li><a href="#">Ferramentas</a></li>
+        <li><a href="#">Conta</a></li>
+        <li><a href="#">Sair</a></li>
+      </ul>
+    </nav>
+  </header>
 
-                <div class="status-message" id="status-message">
-                    Clique em play para iniciar a transmissão
-                </div>
-                
-                <div class="permission-request" id="permission-help">
-                    <h3><i class="fas fa-exclamation-circle"></i> Permissão necessária</h3>
-                    <p>Os navegadores modernos exigem sua interação para reproduzir áudio. Se nada acontecer ao clicar em play:</p>
-                    <ol>
-                        <li>Verifique se o seu navegador não está bloqueando pop-ups</li>
-                        <li>Procure por um ícone de áudio na barra de endereço e clique para permitir</li>
-                        <li>Atualize a página e tente novamente</li>
-                    </ol>
-                    <p>Precisa de <a class="help-link" id="more-help">mais ajuda</a>?</p>
-                </div>
-            </div>
-            
-            <div class="radio-info">
-                <p>Transmitindo via MyRadioStream | Themonf</p>
-            </div>
-            
-            <div class="social-links">
-                <a href="#" class="social-btn">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" class="social-btn">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="#" class="social-btn">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a href="#" class="social-btn">
-                    <i class="fab fa-whatsapp"></i>
-                </a>
-            </div>
-        </div>
+  <main>
+    <h2>🎵 Agora Tocando</h2>
+    <div class="player">
+      <!-- Player oficial -->
+      <script src="//myradiostream.com/embed/Themonf"></script>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const playBtn = document.getElementById('play-btn');
-            const playIcon = document.getElementById('play-icon');
-            const volumeSlider = document.getElementById('volume-slider');
-            const statusMessage = document.getElementById('status-message');
-            const permissionHelp = document.getElementById('permission-help');
-            const moreHelpLink = document.getElementById('more-help');
-            let isPlaying = false;
-            let audioElement;
-            let userInteracted = false;
-            
-            // Inicializar o player quando o usuário interagir com a página
-            document.body.addEventListener('click', function() {
-                if (!userInteracted) {
-                    userInteracted = true;
-                    initPlayer();
-                }
-            }, { once: true });
-            
-            function initPlayer() {
-                try {
-                    // Criar elemento de áudio
-                    audioElement = new Audio();
-                    
-                    // URL do stream da rádio (usando um proxy CORS para evitar problemas de mixed content)
-                    const streamURL = 'https://corsproxy.io/?http://s26.myradiostream.com:22684/';
-                    
-                    audioElement.src = streamURL;
-                    audioElement.crossOrigin = "anonymous";
-                    audioElement.preload = "none";
-                    audioElement.volume = volumeSlider.value / 100;
-                    
-                    // Evento quando o áudio começa a tocar
-                    audioElement.addEventListener('play', function() {
-                        isPlaying = true;
-                        playIcon.className = "fas fa-pause";
-                        statusMessage.textContent = "Transmissão ao vivo - Rádio THEMONF";
-                        statusMessage.style.color = "#fdbb2d";
-                        document.querySelector('.song-title').textContent = "Transmissão Ao Vivo";
-                        document.querySelector('.artist').textContent = "Rádio THEMONF - 128kbps";
-                        permissionHelp.style.display = 'none';
-                    });
-                    
-                    // Evento quando o áudio pausa
-                    audioElement.addEventListener('pause', function() {
-                        isPlaying = false;
-                        playIcon.className = "fas fa-play";
-                        statusMessage.textContent = "Transmissão pausada. Clique para retomar.";
-                        statusMessage.style.color = "";
-                    });
-                    
-                    // Evento em caso de erro
-                    audioElement.addEventListener('error', function(e) {
-                        console.error("Erro no áudio:", e);
-                        statusMessage.textContent = "Erro ao conectar. Atualize a página e tente novamente.";
-                        statusMessage.style.color = "#e94057";
-                        isPlaying = false;
-                        playIcon.className = "fas fa-play";
-                    });
-                    
-                } catch (error) {
-                    console.error("Erro ao inicializar player:", error);
-                    statusMessage.textContent = "Erro ao inicializar o player. Atualize a página.";
-                    statusMessage.style.color = "#e94057";
-                }
-            }
-            
-            // Controle de play/pause
-            playBtn.addEventListener('click', function() {
-                if (!userInteracted) {
-                    userInteracted = true;
-                    initPlayer();
-                }
-                
-                if (isPlaying) {
-                    stopPlayer();
-                } else {
-                    startPlayer();
-                }
-            });
-            
-            // Função para iniciar o player
-            function startPlayer() {
-                statusMessage.textContent = "Conectando à transmissão...";
-                statusMessage.style.color = "";
-                
-                if (!audioElement) {
-                    initPlayer();
-                }
-                
-                // Tentar reproduzir
-                audioElement.play().then(() => {
-                    console.log("Áudio iniciado com sucesso");
-                }).catch(error => {
-                    console.error("Erro ao reproduzir:", error);
-                    statusMessage.textContent = "Permissão necessária. Clique para permitir a reprodução de áudio.";
-                    statusMessage.style.color = "#ffc107";
-                    permissionHelp.style.display = 'block';
-                    
-                    // Mostrar instruções específicas para diferentes navegadores
-                    if (error.name === "NotAllowedError") {
-                        statusMessage.textContent = "Clique no ícone de som na barra de endereço para permitir a reprodução.";
-                    }
-                });
-            }
-            
-            // Função para parar o player
-            function stopPlayer() {
-                if (audioElement) {
-                    audioElement.pause();
-                }
-                isPlaying = false;
-                playIcon.className = "fas fa-play";
-                statusMessage.textContent = "Transmissão pausada. Clique para retomar.";
-                statusMessage.style.color = "";
-            }
-            
-            // Controle de volume
-            volumeSlider.addEventListener('input', function() {
-                const volume = this.value / 100;
-                if (audioElement) {
-                    audioElement.volume = volume;
-                }
-            });
-            
-            // Botões de próximo e anterior (apenas para visual)
-            document.getElementById('prev-btn').addEventListener('click', function() {
-                statusMessage.textContent = "Funcionalidade em desenvolvimento";
-                statusMessage.style.color = "#ffc107";
-                setTimeout(() => {
-                    if (isPlaying) {
-                        statusMessage.textContent = "Transmissão ao vivo - Rádio THEMONF";
-                        statusMessage.style.color = "#fdbb2d";
-                    } else {
-                        statusMessage.textContent = "Clique em play para iniciar a transmissão";
-                        statusMessage.style.color = "";
-                    }
-                }, 2000);
-            });
-            
-            document.getElementById('next-btn').addEventListener('click', function() {
-                statusMessage.textContent = "Funcionalidade em desenvolvimento";
-                statusMessage.style.color = "#ffc107";
-                setTimeout(() => {
-                    if (isPlaying) {
-                        statusMessage.textContent = "Transmissão ao vivo - Rádio THEMONF";
-                        statusMessage.style.color = "#fdbb2d";
-                    } else {
-                        statusMessage.textContent = "Clique em play para iniciar a transmissão";
-                        statusMessage.style.color = "";
-                    }
-                }, 2000);
-            });
-            
-            // Mais ajuda
-            moreHelpLink.addEventListener('click', function() {
-                const helpText = `
-                    <h3><i class="fas fa-info-circle"></i> Como permitir reprodução de áudio</h3>
-                    <p><strong>No Chrome:</strong> Procure por um ícone de som ou câmera na barra de endereço e clique em "Permitir"</p>
-                    <p><strong>No Firefox:</strong> Clique no ícone de "escudo" na barra de endereço e altere as permissões</p>
-                    <p><strong>No Safari:</strong> Vá em Preferências > Sites > Auto-Reprodução e permita para este site</p>
-                    <p><strong>Solução alternativa:</strong> Tente atualizar a página e clicar em play novamente</p>
-                `;
-                
-                permissionHelp.innerHTML = helpText;
-            });
-            
-            // Inicializar o player se o parâmetro autoPlay estiver presente na URL
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('autoPlay')) {
-                userInteracted = true;
-                initPlayer();
-                setTimeout(startPlayer, 500);
-            }
-        });
-    </script>
+    <div class="status">
+      <h3>📡 Status do Servidor</h3>
+      <p><strong>Servidor:</strong> s26.myradiostream.com</p>
+      <p><strong>Porta:</strong> 22684</p>
+      <p><strong>Taxa de Bits:</strong> 128 kbps</p>
+      <p><strong>Ouvintes:</strong> até 200</p>
+      <p><strong>Status:</strong> <span style="color:lightgreen">Online, Pronto</span></p>
+    </div>
+
+    <h2>ℹ️ Informações</h2>
+    <p>Bem-vindo, <strong>Themonf</strong>! Aproveite sua experiência de transmissão ao vivo.</p>
+    <p>Você pode ouvir nossa rádio também em: <a href="http://Themonf.com-listen.live/" target="_blank">Themonf.com-listen.live</a></p>
+  </main>
+
+  <footer>
+    <p>© 2025 Rádio THEMONF | Powered by MyRadioStream & THEMONF Platform</p>
+  </footer>
 </body>
 </html>
