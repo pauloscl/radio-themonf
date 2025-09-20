@@ -254,6 +254,48 @@
             font-size: 0.9rem;
         }
         
+        .permission-request {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 193, 7, 0.2);
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            text-align: left;
+        }
+        
+        .permission-request h3 {
+            color: #ffc107;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .permission-request h3 i {
+            margin-right: 10px;
+        }
+        
+        .permission-request ol {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        
+        .permission-request li {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .help-link {
+            color: #fdbb2d;
+            text-decoration: none;
+            border-bottom: 1px dotted #fdbb2d;
+            cursor: pointer;
+        }
+        
+        .help-link:hover {
+            color: #ffc107;
+            border-bottom: 1px solid #ffc107;
+        }
+        
         @media (max-width: 600px) {
             .player-card {
                 padding: 20px;
@@ -271,6 +313,10 @@
             .secondary-btn {
                 width: 45px;
                 height: 45px;
+            }
+            
+            .permission-request {
+                padding: 12px;
             }
         }
     </style>
@@ -321,6 +367,17 @@
                 <div class="status-message" id="status-message">
                     Clique em play para iniciar a transmissão
                 </div>
+                
+                <div class="permission-request" id="permission-help">
+                    <h3><i class="fas fa-exclamation-circle"></i> Permissão necessária</h3>
+                    <p>Os navegadores modernos exigem sua interação para reproduzir áudio. Se nada acontecer ao clicar em play:</p>
+                    <ol>
+                        <li>Verifique se o seu navegador não está bloqueando pop-ups</li>
+                        <li>Procure por um ícone de áudio na barra de endereço e clique para permitir</li>
+                        <li>Atualize a página e tente novamente</li>
+                    </ol>
+                    <p>Precisa de <a class="help-link" id="more-help">mais ajuda</a>?</p>
+                </div>
             </div>
             
             <div class="radio-info">
@@ -350,14 +407,21 @@
             const playIcon = document.getElementById('play-icon');
             const volumeSlider = document.getElementById('volume-slider');
             const statusMessage = document.getElementById('status-message');
+            const permissionHelp = document.getElementById('permission-help');
+            const moreHelpLink = document.getElementById('more-help');
             let isPlaying = false;
-            let audioContext;
             let audioElement;
+            let userInteracted = false;
             
-            // Função para iniciar o player
-            function startPlayer() {
-                statusMessage.textContent = "Conectando à transmissão...";
-                
+            // Inicializar o player quando o usuário interagir com a página
+            document.body.addEventListener('click', function() {
+                if (!userInteracted) {
+                    userInteracted = true;
+                    initPlayer();
+                }
+            }, { once: true });
+            
+            function initPlayer() {
                 try {
                     // Criar elemento de áudio
                     audioElement = new Audio();
@@ -368,58 +432,92 @@
                     audioElement.src = streamURL;
                     audioElement.crossOrigin = "anonymous";
                     audioElement.preload = "none";
+                    audioElement.volume = volumeSlider.value / 100;
                     
                     // Evento quando o áudio começa a tocar
                     audioElement.addEventListener('play', function() {
                         isPlaying = true;
                         playIcon.className = "fas fa-pause";
                         statusMessage.textContent = "Transmissão ao vivo - Rádio THEMONF";
+                        statusMessage.style.color = "#fdbb2d";
                         document.querySelector('.song-title').textContent = "Transmissão Ao Vivo";
                         document.querySelector('.artist').textContent = "Rádio THEMONF - 128kbps";
+                        permissionHelp.style.display = 'none';
+                    });
+                    
+                    // Evento quando o áudio pausa
+                    audioElement.addEventListener('pause', function() {
+                        isPlaying = false;
+                        playIcon.className = "fas fa-play";
+                        statusMessage.textContent = "Transmissão pausada. Clique para retomar.";
+                        statusMessage.style.color = "";
                     });
                     
                     // Evento em caso de erro
                     audioElement.addEventListener('error', function(e) {
                         console.error("Erro no áudio:", e);
                         statusMessage.textContent = "Erro ao conectar. Atualize a página e tente novamente.";
+                        statusMessage.style.color = "#e94057";
                         isPlaying = false;
                         playIcon.className = "fas fa-play";
                     });
                     
-                    // Tentar reproduzir
-                    audioElement.play().then(() => {
-                        console.log("Áudio iniciado com sucesso");
-                    }).catch(error => {
-                        console.error("Erro ao reproduzir:", error);
-                        statusMessage.textContent = "Clique para permitir a reprodução de áudio";
-                    });
-                    
                 } catch (error) {
-                    console.error("Erro ao iniciar player:", error);
+                    console.error("Erro ao inicializar player:", error);
                     statusMessage.textContent = "Erro ao inicializar o player. Atualize a página.";
+                    statusMessage.style.color = "#e94057";
                 }
-            }
-            
-            // Função para parar o player
-            function stopPlayer() {
-                if (audioElement) {
-                    audioElement.pause();
-                    audioElement.src = "";
-                }
-                isPlaying = false;
-                playIcon.className = "fas fa-play";
-                statusMessage.textContent = "Transmissão pausada. Clique para retomar.";
-                document.querySelector('.song-title').textContent = "Transmissão Pausada";
             }
             
             // Controle de play/pause
             playBtn.addEventListener('click', function() {
+                if (!userInteracted) {
+                    userInteracted = true;
+                    initPlayer();
+                }
+                
                 if (isPlaying) {
                     stopPlayer();
                 } else {
                     startPlayer();
                 }
             });
+            
+            // Função para iniciar o player
+            function startPlayer() {
+                statusMessage.textContent = "Conectando à transmissão...";
+                statusMessage.style.color = "";
+                
+                if (!audioElement) {
+                    initPlayer();
+                }
+                
+                // Tentar reproduzir
+                audioElement.play().then(() => {
+                    console.log("Áudio iniciado com sucesso");
+                }).catch(error => {
+                    console.error("Erro ao reproduzir:", error);
+                    statusMessage.textContent = "Permissão necessária. Clique para permitir a reprodução de áudio.";
+                    statusMessage.style.color = "#ffc107";
+                    permissionHelp.style.display = 'block';
+                    
+                    // Mostrar instruções específicas para diferentes navegadores
+                    if (error.name === "NotAllowedError") {
+                        statusMessage.textContent = "Clique no ícone de som na barra de endereço para permitir a reprodução.";
+                    }
+                });
+            }
+            
+            // Função para parar o player
+            function stopPlayer() {
+                if (audioElement) {
+                    audioElement.pause();
+                }
+                isPlaying = false;
+                playIcon.className = "fas fa-play";
+                statusMessage.textContent = "Transmissão pausada. Clique para retomar.";
+                statusMessage.style.color = "";
+            }
             
             // Controle de volume
             volumeSlider.addEventListener('input', function() {
@@ -432,26 +530,50 @@
             // Botões de próximo e anterior (apenas para visual)
             document.getElementById('prev-btn').addEventListener('click', function() {
                 statusMessage.textContent = "Funcionalidade em desenvolvimento";
+                statusMessage.style.color = "#ffc107";
                 setTimeout(() => {
                     if (isPlaying) {
                         statusMessage.textContent = "Transmissão ao vivo - Rádio THEMONF";
+                        statusMessage.style.color = "#fdbb2d";
+                    } else {
+                        statusMessage.textContent = "Clique em play para iniciar a transmissão";
+                        statusMessage.style.color = "";
                     }
                 }, 2000);
             });
             
             document.getElementById('next-btn').addEventListener('click', function() {
                 statusMessage.textContent = "Funcionalidade em desenvolvimento";
+                statusMessage.style.color = "#ffc107";
                 setTimeout(() => {
                     if (isPlaying) {
                         statusMessage.textContent = "Transmissão ao vivo - Rádio THEMONF";
+                        statusMessage.style.color = "#fdbb2d";
+                    } else {
+                        statusMessage.textContent = "Clique em play para iniciar a transmissão";
+                        statusMessage.style.color = "";
                     }
                 }, 2000);
             });
             
-            // Iniciar automaticamente se o parâmetro autoPlay estiver presente na URL
+            // Mais ajuda
+            moreHelpLink.addEventListener('click', function() {
+                const helpText = `
+                    <h3><i class="fas fa-info-circle"></i> Como permitir reprodução de áudio</h3>
+                    <p><strong>No Chrome:</strong> Procure por um ícone de som ou câmera na barra de endereço e clique em "Permitir"</p>
+                    <p><strong>No Firefox:</strong> Clique no ícone de "escudo" na barra de endereço e altere as permissões</p>
+                    <p><strong>No Safari:</strong> Vá em Preferências > Sites > Auto-Reprodução e permita para este site</p>
+                    <p><strong>Solução alternativa:</strong> Tente atualizar a página e clicar em play novamente</p>
+                `;
+                
+                permissionHelp.innerHTML = helpText;
+            });
+            
+            // Inicializar o player se o parâmetro autoPlay estiver presente na URL
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('autoPlay')) {
-                // Pequeno delay para garantir que a interação do usuário seja registrada
+                userInteracted = true;
+                initPlayer();
                 setTimeout(startPlayer, 500);
             }
         });
