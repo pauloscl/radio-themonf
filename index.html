@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
+<!DOCTYPE html><html lang="pt-BR"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Radio THEMONF - Online</title>
+  <title>Radio THEMONF</title>
   <style>
     /* Reset básico */
     * {
@@ -13,164 +11,154 @@
       font-family: 'Arial', sans-serif;
     }
 
-    body {
-      background: linear-gradient(135deg, #0f0f0f, #1c1c2b);
-      color: #fff;
-      line-height: 1.6;
-    }
+body {
+  background: linear-gradient(135deg, #0f0f0f, #1c1c2b);
+  color: #fff;
+  line-height: 1.6;
+}header {
+  background: #111;
+  padding: 1.5rem;
+  text-align: center;
+  border-bottom: 2px solid #6c63ff;
+}header h1 {
+  font-size: 2.3rem;
+  color: #6c63ff;
+  margin-bottom: .5rem;
+}header p {
+  font-size: 1.3rem;
+  color: #aaa;
+}main {
+  padding: 2rem;
+  max-width: 900px;
+  margin: auto;
+}.player {
+  text-align: center;
+  margin-bottom: 2rem;
+}
 
-    header {
-      background: #111;
-      padding: 1.5rem;
-      text-align: center;
-      border-bottom: 2px solid #6c63ff;
-    }
 
-    header h1 {
-      font-size: 2rem;
-      color: #6c63ff;
-      margin-bottom: .5rem;
-    }
 
-    header p {
-      font-size: 1rem;
-      color: #aaa;
-    }
 
-    main {
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
 
-    .player {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
+/* --- ESTILO DO WIDGET (foco só no botão Play) --- */
+.player {
+  text-align: center;
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 300px; /* Valor intermediário para melhor ajuste */
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden; /* Corta o excesso */
+  height: 100px; /* Altura ajustada para incluir o botão Play */
+}
 
-    /* --- ESTILO DO WIDGET (foco só no botão Play) --- */
-    .cstrEmbed {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 300px;          /* área visível */
-      height: 300px;
-      margin: auto;
-      overflow: hidden;
-      transform: scale(2);   /* aumenta o botão */
-      transform-origin: center;
-      border-radius: 50%;    /* botão redondo */
-    }
+.cstrEmbed {
+  width: 100%;
+  height: 100%;
+  transform: scale(2.0); /* Escala reduzida para melhor visualização */
+  transform-origin: 90% 187%; /* Ajustado para focar no botão Play */
+  border-radius: 0;
+}
 
-    .section {
-      margin: 2rem 0;
-      padding: 1.5rem;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    }
 
-    .section h2 {
-      color: #6c63ff;
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-    }
 
-    ul {
-      list-style: none;
-    }
 
-    ul li {
-      margin: .5rem 0;
-      font-size: 1.1rem;
-    }
-
-    footer {
-      text-align: center;
-      padding: 1rem;
-      border-top: 2px solid #6c63ff;
-      font-size: 0.9rem;
-      background: #111;
-    }
-
-    .social {
-      margin-top: 1rem;
-    }
-
-    .social a {
-      color: #6c63ff;
-      margin: 0 .5rem;
-      font-weight: bold;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .social a:hover {
-      color: #fff;
-    }
-
-    /* Responsivo */
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 1.5rem;
-      }
-      .section h2 {
-        font-size: 1.2rem;
-      }
-    }
-  </style>
+.section {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}.section h2 {
+  color: #6c63ff;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}ul {
+  list-style: none;
+}ul li {
+  margin: .5rem 0;
+  font-size: 1.1rem;
+}footer {
+  text-align: center;
+  padding: 1rem;
+  border-top: 2px solid #6c63ff;
+  font-size: 0.9rem;
+  background: #111;
+}.social {
+  margin-top: 1rem;
+}.social a {
+  color: #6c63ff;
+  margin: 0 .5rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s;
+}.social a:hover {
+  color: #fff;
+}/* Responsivo */
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+  .section h2 {
+    font-size: 1.2rem;
+  }
+}  </style>
 </head>
 <body>
+
   <header>
-    <h1>🎧 Radio THEMONF</h1>
+    <h1> Radio THEMONF</h1>
     <p>A sua rádio online em Santa Maria do Pará</p>
   </header>
 
   <main>
     <!-- Player -->
     <div class="player section">
-      <h2>🎶 Radio THEMONF 🎶</h2>
+      <h2> Radio THEMONF </h2>
 
-      <div class="cstrEmbed" 
-        data-type="newStreamPlayer" 
-        data-publicToken="c7ad1013-ce48-4d87-9407-c2bb7ef476f4" 
-        data-theme="light" 
-        data-color="6C2BDD" 
-        data-channelId="" 
-        data-rendered="false">
-        <a href="https://www.caster.fm">Shoutcast Hosting</a>
-        <a href="https://www.caster.fm">Stream Hosting</a>
-        <a href="https://www.caster.fm">Radio Server Hosting</a>
-      </div>
+  <div class="cstrEmbed"
+    data-type="newStreamPlayer"
+    data-publicToken="c7ad1013-ce48-4d87-9407-c2bb7ef476f4"
+    data-theme="light"
+    data-color="6C2BDD"
+    data-channelId=""
+    data-rendered="false">
+    <a href="https://www.caster.fm">Shoutcast Hosting</a>
+    <a href="https://www.caster.fm">Stream Hosting</a>
+    <a href="https://www.caster.fm">Radio Server Hosting</a>
+  </div>
 
-      <script src="//cdn.cloud.caster.fm/widgets/embed.js"></script>
-    </div>
+  <script src="//cdn.cloud.caster.fm/widgets/embed.js"></script>
+</div>
 
-    <!-- Programação -->
-    <div class="section">
-      <h2>📻 Programação</h2>
-      <ul>
-        <li>08h - Bom Dia THEMONF</li>
-        <li>12h - Hora do Forró</li>
-        <li>15h - Top Hits</li>
-        <li>20h - Noite Romântica</li>
-      </ul>
-    </div>
+<!-- Programação -->
+<div class="section">
+  <h2> Programação</h2>
+  <ul>
+    <li>08h - Saúde e bem-estar</li>
+    <li>12h - Equilíbrio financeiro</li>
+    <li>15h - Alimentação saudável</li>
+    <li>20h - Concentração e foco</li>
+    <li>22h - Criatividade e desenvolvimento pessoal</li>
+  </ul>
+</div>
 
-    <!-- Redes Sociais -->
-    <div class="section">
-      <h2>🌍 Conecte-se</h2>
-      <p>Siga a Radio THEMONF nas redes sociais:</p>
-      <div class="social">
-        <a href="#">Facebook</a> |
-        <a href="#">Instagram</a> |
-        <a href="#">Twitter</a>
-      </div>
-    </div>
-  </main>
+<!-- Redes Sociais
+<div class="section">
+  <h2> Conecte-se</h2>
+  <p>Siga a Radio THEMONF nas redes sociais:</p>
+  <div class="social">
+    <a href="#">Facebook</a> |
+    <a href="#">Instagram</a> |
+    <a href="#">Twitter</a>
+  </div>
+</div> -->
+
+</main>
 
   <footer>
     <p>© 2025 Radio THEMONF - Todos os direitos reservados</p>
   </footer>
 </body>
 </html>
+
