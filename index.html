@@ -48,16 +48,20 @@
       margin-bottom: 2rem;
     }
 
-    /* --- ESTILO DO WIDGET (só botão play) --- */
-    .cstrEmbed {
-      overflow: hidden;         /* esconde o excesso */
-      width: 120px;             /* define tamanho visível */
-      height: 120px;
-      margin: auto;             /* centraliza */
-      transform: scale(2.2);    /* aumenta o botão */
-      transform-origin: center;
-      border-radius: 50%;       /* deixa redondo */
-    }
+  /* --- ESTILO DO WIDGET (mostrando só o botão Play em destaque) --- */
+.cstrEmbed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 300px;         /* área visível maior */
+  height: 300px;
+  margin: auto;
+  overflow: hidden;
+  transform: scale(2);  /* dá zoom no botão */
+  transform-origin: center;
+  border-radius: 50%;   /* deixa circular */
+}
+
 
     .section {
       margin: 2rem 0;
