@@ -1,117 +1,159 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minha Rádio - THEMONF</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>THEMONF FM - Rádio Online</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #121212;
-      color: #f0f0f0;
-    }
-    header {
-      background: #1f1f1f;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 1.4rem;
-      color: #ffcc00;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
+    /* Reset básico */
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
     }
-    nav a {
-      text-decoration: none;
-      color: #f0f0f0;
-      font-weight: bold;
-      transition: color 0.3s;
+
+    body {
+      background: linear-gradient(135deg, #0f0f0f, #1c1c2b);
+      color: #fff;
+      line-height: 1.6;
     }
-    nav a:hover {
-      color: #ffcc00;
+
+    header {
+      background: #111;
+      padding: 1.5rem;
+      text-align: center;
+      border-bottom: 2px solid #6c63ff;
     }
+
+    header h1 {
+      font-size: 2rem;
+      color: #6c63ff;
+      margin-bottom: .5rem;
+    }
+
+    header p {
+      font-size: 1rem;
+      color: #aaa;
+    }
+
     main {
+      padding: 2rem;
       max-width: 900px;
-      margin: 30px auto;
-      padding: 20px;
-      background: #1e1e1e;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      margin: auto;
     }
-    h2 {
-      color: #ffcc00;
+
+    .player {
+      text-align: center;
+      margin-bottom: 2rem;
     }
-    .status {
-      margin: 20px 0;
-      padding: 15px;
-      border: 1px solid #444;
-      border-radius: 8px;
-      background: #2a2a2a;
-    }
-    iframe, .player {
+
+    audio {
       width: 100%;
-      border: none;
-      height: 120px;
+      max-width: 400px;
+      margin: 1rem 0;
     }
+
+    .section {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .section h2 {
+      color: #6c63ff;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    ul li {
+      margin: .5rem 0;
+      font-size: 1.1rem;
+    }
+
     footer {
       text-align: center;
-      padding: 15px;
-      background: #1f1f1f;
-      margin-top: 40px;
-      color: #888;
+      padding: 1rem;
+      border-top: 2px solid #6c63ff;
       font-size: 0.9rem;
+      background: #111;
+    }
+
+    .social {
+      margin-top: 1rem;
+    }
+
+    .social a {
+      color: #6c63ff;
+      margin: 0 .5rem;
+      font-weight: bold;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .social a:hover {
+      color: #fff;
+    }
+
+    /* Responsivo */
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.5rem;
+      }
+      .section h2 {
+        font-size: 1.2rem;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1><i class="fa fa-broadcast-tower"></i> Rádio THEMONF</h1>
-    <nav>
-      <ul>
-        <li><a href="#">Início</a></li>
-        <li><a href="#">Notícias</a></li>
-        <li><a href="#">Estatísticas</a></li>
-        <li><a href="#">Ferramentas</a></li>
-        <li><a href="#">Conta</a></li>
-        <li><a href="#">Sair</a></li>
-      </ul>
-    </nav>
+    <h1>🎧 THEMONF FM</h1>
+    <p>A sua rádio online em Santa Maria do Pará</p>
   </header>
 
   <main>
-    <h2>🎵 Agora Tocando</h2>
-    <div class="player">
-      <!-- Player oficial -->
-      <script src="//myradiostream.com/embed/Themonf"></script>
+    <!-- Player -->
+    <div class="player section">
+      <h2>▶️ Ao Vivo</h2>
+      <p>Sintonize agora:</p>
+      <audio controls autoplay>
+        <source src="http://SEU-LINK-ICECAST/live" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+      </audio>
     </div>
 
-    <div class="status">
-      <h3>📡 Status do Servidor</h3>
-      <p><strong>Servidor:</strong> s26.myradiostream.com</p>
-      <p><strong>Porta:</strong> 22684</p>
-      <p><strong>Taxa de Bits:</strong> 128 kbps</p>
-      <p><strong>Ouvintes:</strong> até 200</p>
-      <p><strong>Status:</strong> <span style="color:lightgreen">Online, Pronto</span></p>
+    <!-- Programação -->
+    <div class="section">
+      <h2>📻 Programação</h2>
+      <ul>
+        <li>08h - Bom Dia THEMONF</li>
+        <li>12h - Hora do Forró</li>
+        <li>15h - Top Hits</li>
+        <li>20h - Noite Romântica</li>
+      </ul>
     </div>
 
-    <h2>ℹ️ Informações</h2>
-    <p>Bem-vindo, <strong>Themonf</strong>! Aproveite sua experiência de transmissão ao vivo.</p>
-    <p>Você pode ouvir nossa rádio também em: <a href="http://Themonf.com-listen.live/" target="_blank">Themonf.com-listen.live</a></p>
+    <!-- Redes Sociais -->
+    <div class="section">
+      <h2>🌍 Conecte-se</h2>
+      <p>Siga a THEMONF FM nas redes sociais:</p>
+      <div class="social">
+        <a href="#">Facebook</a> |
+        <a href="#">Instagram</a> |
+        <a href="#">Twitter</a>
+      </div>
+    </div>
   </main>
 
   <footer>
-    <p>© 2025 Rádio THEMONF | Powered by MyRadioStream & THEMONF Platform</p>
+    <p>© 2025 THEMONF FM - Todos os direitos reservados</p>
   </footer>
 </body>
 </html>
