@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>THEMONF FM - Rádio Online</title>
+  <title>Radio THEMONF - Online</title>
   <style>
     /* Reset básico */
     * {
@@ -46,12 +46,6 @@
     .player {
       text-align: center;
       margin-bottom: 2rem;
-    }
-
-    audio {
-      width: 100%;
-      max-width: 400px;
-      margin: 1rem 0;
     }
 
     .section {
@@ -114,19 +108,28 @@
 </head>
 <body>
   <header>
-    <h1>🎧 THEMONF FM</h1>
+    <h1>🎧 Radio THEMONF</h1>
     <p>A sua rádio online em Santa Maria do Pará</p>
   </header>
 
   <main>
     <!-- Player -->
     <div class="player section">
-      <h2>▶️ Ao Vivo</h2>
-      <p>Sintonize agora:</p>
-      <audio controls autoplay>
-        <source src="http://SEU-LINK-ICECAST/live" type="audio/mpeg">
-        Seu navegador não suporta áudio.
-      </audio>
+      <h2>🎶 Radio THEMONF 🎶</h2>
+
+      <div class="cstrEmbed" 
+        data-type="newStreamPlayer" 
+        data-publicToken="c7ad1013-ce48-4d87-9407-c2bb7ef476f4" 
+        data-theme="light" 
+        data-color="6C2BDD" 
+        data-channelId="" 
+        data-rendered="false">
+        <a href="https://www.caster.fm">Shoutcast Hosting</a>
+        <a href="https://www.caster.fm">Stream Hosting</a>
+        <a href="https://www.caster.fm">Radio Server Hosting</a>
+      </div>
+
+      <script src="//cdn.cloud.caster.fm/widgets/embed.js"></script>
     </div>
 
     <!-- Programação -->
@@ -143,7 +146,7 @@
     <!-- Redes Sociais -->
     <div class="section">
       <h2>🌍 Conecte-se</h2>
-      <p>Siga a THEMONF FM nas redes sociais:</p>
+      <p>Siga a Radio THEMONF nas redes sociais:</p>
       <div class="social">
         <a href="#">Facebook</a> |
         <a href="#">Instagram</a> |
@@ -153,7 +156,7 @@
   </main>
 
   <footer>
-    <p>© 2025 THEMONF FM - Todos os direitos reservados</p>
+    <p>© 2025 Radio THEMONF - Todos os direitos reservados</p>
   </footer>
 </body>
 </html>
