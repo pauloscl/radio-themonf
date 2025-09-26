@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Radio THEMONF</title>
+  <title>Radio THEMONF - Online</title>
   <style>
     /* Reset básico */
     * {
@@ -48,21 +48,19 @@
       margin-bottom: 2rem;
     }
 
- .cstrEmbed {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 200px;          /* tamanho do círculo visível */
-  height: 200px;
-  margin: auto;
-  overflow: hidden;
-  transform: scale(2.5) translate(-40%, -20%);
-  transform-origin: center;
-  border-radius: 50%;    /* recorte circular */
-}
-
-
-
+    /* --- ESTILO DO WIDGET (foco só no botão Play) --- */
+    .cstrEmbed {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 300px;          /* área visível */
+      height: 300px;
+      margin: auto;
+      overflow: hidden;
+      transform: scale(2);   /* aumenta o botão */
+      transform-origin: center;
+      border-radius: 50%;    /* botão redondo */
+    }
 
     .section {
       margin: 2rem 0;
